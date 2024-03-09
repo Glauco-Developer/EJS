@@ -1,24 +1,30 @@
 import express from "express";
 import bodyParser from "body-parser";
-import morgan from "morgan";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = 3000;
+var userName = "";
 
-// Middleware Functions
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan("tiny"));
+
+// Middleware
+function userData(req, res, next) {
+    console.log(req.body);
+    userName = req.body["username"];
+    next();
+}
+
+app.use(userData);
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });
 
 app.post('/login', (req, res) => {
-    console.log(req.body);
-    res.sendFile(__dirname + "/public/dashboard.html");
+    res.send(`<h1>Welcome ${userName}</h1>`);
 });
 
 app.listen(port, () => {
