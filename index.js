@@ -10,20 +10,12 @@ var userName = "";
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Middleware
-function userData(req, res, next) {
-    console.log(req.body);
-    userName = req.body["username"];
-    next();
-}
-
-app.use(userData);
-
 app.get('/', (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });
 
 app.post('/login', (req, res) => {
+    userName = req.body["username"];
     res.send(`<h1>Welcome ${userName}</h1>`);
 });
 
