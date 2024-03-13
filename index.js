@@ -6,17 +6,23 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = 3000;
-var userName = "";
-
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + "/public/index.html");
-});
+    const today = new Date();
+    const day = today.getDay();
 
-app.post('/login', (req, res) => {
-    userName = req.body["username"];
-    res.send(`<h1>Welcome ${userName}</h1>`);
+    let type = "a weekday"
+    let adv = "it's time to work hard"
+
+    if(day === 0 || day === 6) {
+        type = "the weekend"
+        adv = "it's time to have fun"
+    }
+
+    res.render("index.ejs", {
+        dayType: type,
+        advice: adv,
+    });
 });
 
 app.listen(port, () => {
