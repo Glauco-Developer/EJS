@@ -1,22 +1,35 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-    const data = {
-        title: "EJS Tags",
-        seconds: new Date().getSeconds(),
-        items: ["apple", "banana", "cherry"],
-        htmlContent: "<strong>Strong text</strong>"
-    };
-    res.render("index.ejs", data);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
+
+/* Write your code here:
+Step 3: Add the routes to handle the render of the about and contact pages.
+  Hint: Check the nav bar in the header.ejs to see the button hrefs
+Step 4: Add the partials to the about and contact pages to show the header and footer on those pages. */
+
+
+app.get("/", (req, res) => {
+  res.render("index.ejs");
+});
+
+app.get("/about", (req, res) => {
+  res.render("about.ejs");
+})
+
+app.get("/contact", (req, res) => {
+  res.render("contact.ejs");
+})
+
+app.post("/submit", (req, res) => {
+  const name = req.body["name"];
+  res.render("index.ejs", { firstName: name });
 });
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}.`)
+  console.log(`Server running on port ${port}`);
 });
